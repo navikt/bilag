@@ -14,6 +14,10 @@
         <version>3.1.2</version>
     </parent>
 
+    <properties>
+        <snakeyaml.version>2.0</snakeyaml.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,11 +28,22 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- GHAS -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>app</finalName>
+    </build>
 
 </project>
