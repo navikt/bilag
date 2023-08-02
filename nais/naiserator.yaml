@@ -1,0 +1,35 @@
+kind: Application
+apiVersion: nais.io/v1alpha1
+metadata:
+  name: {{ APP_NAME }}
+  namespace: teamdokumenthandtering
+  labels:
+    team: teamdokumenthandtering
+spec:
+  image: {{ image }}
+  ingresses:
+    {{#each INGRESSES}}
+       - {{this }}
+      {{/each}}
+  liveness:
+    path: /actuator/health/liveness
+    initialDelay: 20
+    failureThreshold: 10
+  readiness:
+    path: /actuator/health/readiness
+    initialDelay: 20
+    timeout: 3
+  port: 8080
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+  replicas:
+    min: {{ MIN_REPLICAS }}
+    max: {{ MAX_REPLICAS }}
+    cpuThresholdPercentage: 50
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      memory: 1024Mi

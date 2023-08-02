@@ -1,0 +1,8 @@
+{
+  "APP_NAME": "bilag-q1",
+  "INGRESSES": [
+    "https://bilag-q1.dev.intern.nav.no"
+  ],
+  "MIN_REPLICAS": 1,
+  "MAX_REPLICAS": 2
+}
