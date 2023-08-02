@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%t, %d, %-5p, %C:%L] - %.-100000m%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="console"/>
+	</root>
+
+	<logger name="no.nav.bilag" level="DEBUG" additivity="false">
+		<appender-ref ref="console"/>
+	</logger>
+</included>
