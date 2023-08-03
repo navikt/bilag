@@ -16,9 +16,10 @@
 
 	<properties>
 		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
+		<spring-cloud-contract-wiremock.version>4.0.4</spring-cloud-contract-wiremock.version>
 
 		<!-- GHAS -->
-		<snakeyaml.version>2.0</snakeyaml.version>
+		<snakeyaml.version>2.1</snakeyaml.version>
 	</properties>
 
 	<dependencies>
@@ -37,6 +38,15 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
 
 		<dependency>
@@ -67,6 +77,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-contract-wiremock</artifactId>
+			<version>${spring-cloud-contract-wiremock.version}</version>
 		</dependency>
 	</dependencies>
 

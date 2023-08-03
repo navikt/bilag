@@ -1,8 +1,11 @@
 {
   "APP_NAME": "bilag-q1",
-  "INGRESSES": [
-    "https://bilag-q1.dev.intern.nav.no"
-  ],
   "MIN_REPLICAS": 1,
-  "MAX_REPLICAS": 2
+  "MAX_REPLICAS": 2,
+  "INGRESS": "https://bilag-q1.dev.intern.nav.no",
+  "BILAG_AZURE_SCOPE": "api://dev-fss.teamdokumenthandtering.bilag-q1/.default",
+  "BILAG_BASE_URL": "https://bilag-q1.dev.intern.nav.no",
+  "BILAG_ENDPOINTS_BREVSERVER_URL": "https://brevserver-nais-q1.dev.intern.nav.no/brevweb/hentdokument",
+  "BILAG_ENDPOINTS_BREVSERVER_SCOPE": "api://dev-fss.teamdokumenthandtering.brevserver-nais-q1/.default",
+  "APPDYNAMICS": "/apikey/appdynamics/dev"
 }
