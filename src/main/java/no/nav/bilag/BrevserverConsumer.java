@@ -44,10 +44,8 @@ public class BrevserverConsumer {
 
 		var response = webClient.get()
 				.uri(uriBuilder -> uriBuilder
-						.queryParam("systemid", "FS10")
-						.queryParam("dokid", dokId)
-						.queryParam("token", dokId)
-						.build())
+						.path("/{dokId}")
+						.build(dokId))
 				.headers(headers -> {
 					setContentDisposition(headers, dokId);
 					setAuthorization(headers, accessToken);
