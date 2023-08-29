@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.bilag.BilagProperties;
+import no.nav.bilag.exceptions.OboTokenException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -61,7 +62,7 @@ public class OboTokenService {
 		try {
 			return objectMapper.readValue(responseJson, TokenResponse.class).accessToken();
 		} catch (JsonProcessingException e) {
-			throw new AzureTokenException("Klarte ikke parse token fra Azure. Feilmelding=" + e.getMessage(), e);
+			throw new OboTokenException("Klarte ikke parse token fra Azure. Feilmelding=" + e.getMessage(), e);
 		}
 	}
 
@@ -74,9 +75,9 @@ public class OboTokenService {
 					response.getMessage(),
 					response.getResponseBodyAsString());
 
-			throw new AzureTokenException(feilmelding, error);
+			throw new OboTokenException(feilmelding, error);
 		} else {
-			throw new AzureTokenException(format("Kall mot Azure feilet teknisk med feilmelding=%s", error.getMessage()), error);
+			throw new OboTokenException(format("Kall mot Azure feilet teknisk med feilmelding=%s", error.getMessage()), error);
 		}
 	}
 

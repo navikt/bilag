@@ -16,8 +16,4 @@ public record AzureProperties(
 		return openidConfigTokenEndpoint().replace("/token", "/authorize");
 	}
 
-	public String getLogoutEndpoint() {
-		return openidConfigTokenEndpoint().replace("/token", "/logout");
-	}
-
 }

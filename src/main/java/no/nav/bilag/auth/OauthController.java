@@ -2,8 +2,9 @@ package no.nav.bilag.auth;
 
 import com.nimbusds.oauth2.sdk.AuthorizationGrant;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.bilag.exceptions.TokenAcquisitionException;
+import no.nav.bilag.exceptions.UserAuthorizationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +20,7 @@ import static org.springframework.http.HttpStatus.TEMPORARY_REDIRECT;
 @RestController
 public class OauthController {
 
-	static final String OAUTH_BASE_PATH = "/oauth2";
-	static final String OAUTH_CALLBACK_PATH = OAUTH_BASE_PATH + "/callback";
+	public static final String OAUTH_CALLBACK_PATH = "/oauth2/callback";
 
 	private final OauthService oauthService;
 
@@ -47,16 +47,5 @@ public class OauthController {
 			log.error("Something went wrong when acquiring access-token for authenticated user: {}", e.getMessage());
 			return ResponseEntity.status(BAD_GATEWAY).build();
 		}
-	}
-
-	@GetMapping(path = OAUTH_BASE_PATH + "/me")
-	public ResponseEntity<String> whoami(HttpSession session) {
-		return oauthService.getJwtClaimsSet(session)
-				.map(jwtClaimsSet -> "{" +
-						"\"NAVident\":\"" + jwtClaimsSet.getNavIdent() + "\"," +
-						"\"name\":\"" + jwtClaimsSet.getName() + "\"" +
-						"}")
-				.map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.ok("{}"));
 	}
 }

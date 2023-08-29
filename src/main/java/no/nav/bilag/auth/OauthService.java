@@ -29,6 +29,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import no.nav.bilag.BilagProperties;
+import no.nav.bilag.exceptions.TokenAcquisitionException;
+import no.nav.bilag.exceptions.UserAuthorizationException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -118,19 +120,6 @@ public class OauthService {
 		} catch (java.text.ParseException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public Optional<NavJwtClaimSet> getJwtClaimsSet(HttpSession session) {
-		return getOAuth2AuthorizationFromSession(session)
-				.map(AccessToken::getValue)
-				.map(s -> {
-					try {
-						return SignedJWT.parse(s).getJWTClaimsSet();
-					} catch (java.text.ParseException e) {
-						return null;
-					}
-				})
-				.map(NavJwtClaimSet::new);
 	}
 
 	URI createAuthorizationUri(HttpSession httpSession) {
