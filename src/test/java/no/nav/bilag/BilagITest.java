@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,6 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -24,6 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureWireMock(port = 0)
 @ActiveProfiles("itest")
+@AutoConfigureWebTestClient
 @Disabled // Denne testklassa er work in progress, og fungerer ikkje per no grunna innloggingsflyten
 public class BilagITest {
 
@@ -70,7 +73,7 @@ public class BilagITest {
 	}
 
 	private void stubAzure() {
-		stubFor(post("/azure/authorize")
+		stubFor(post(urlMatching("/azure/authorize/.*"))
 				.willReturn(aResponse()
 						.withStatus(200)
 						.withHeader("Content-Type", "application/json")
@@ -78,7 +81,7 @@ public class BilagITest {
 	}
 
 	private void stubBrevserver() {
-		stubFor(get(urlPathMatching("/brevweb/hentdokument"))
+		stubFor(get(urlPathMatching("/brevweb/hentdokumentnew"))
 				.willReturn(aResponse()
 						.withStatus(OK.value())
 						.withHeader(CONTENT_TYPE, APPLICATION_PDF_VALUE)

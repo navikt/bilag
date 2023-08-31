@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.valueOf;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/rest")
+@RequestMapping
 public class BilagController {
 
 	private static final String BILAG_FUNKSJONELL_FEILMELDING = "bilag feilet funksjonelt med feilmelding: {}";
@@ -36,7 +36,7 @@ public class BilagController {
 		this.oauthService = oauthService;
 	}
 
-	@GetMapping("/hentdokument/{dokId}")
+	@GetMapping("/hent/{dokId}")
 	public ResponseEntity<byte[]> hentDokument(@PathVariable @Positive(message = "Sti-parameter dokId må være et positivt tall") Long dokId,
 											   HttpServletRequest servletRequest) {
 

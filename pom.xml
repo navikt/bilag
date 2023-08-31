@@ -19,8 +19,25 @@
 		<spring-cloud-contract-wiremock.version>4.0.4</spring-cloud-contract-wiremock.version>
 
 		<!-- GHAS -->
-		<snakeyaml.version>2.1</snakeyaml.version>
+		<snakeyaml.version>2.2</snakeyaml.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.logstash.logback</groupId>
+				<artifactId>logstash-logback-encoder</artifactId>
+				<version>${logstash-logback-encoder.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-contract-wiremock</artifactId>
+				<version>${spring-cloud-contract-wiremock.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -53,18 +70,6 @@
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.logstash.logback</groupId>
-			<artifactId>logstash-logback-encoder</artifactId>
-			<version>${logstash-logback-encoder.version}</version>
-		</dependency>
-
-		<!-- GHAS -->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>${snakeyaml.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -81,7 +86,7 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-contract-wiremock</artifactId>
-			<version>${spring-cloud-contract-wiremock.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
