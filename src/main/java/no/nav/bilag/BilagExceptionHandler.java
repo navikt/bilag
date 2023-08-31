@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -30,6 +31,12 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(BAD_REQUEST)
 				.contentType(TEXT_HTML)
 				.body(badRequestHttpPage());
+	}
+
+	@ExceptionHandler({Exception.class})
+	void handleException(Exception ex) {
+		log.warn(ex.getMessage(), ex);
+		log.warn(ex.getCause().getMessage());
 	}
 
 	private static String badRequestHttpPage() {
