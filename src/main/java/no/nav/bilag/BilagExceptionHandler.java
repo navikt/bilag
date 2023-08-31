@@ -33,11 +33,20 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 				.body(badRequestHttpPage());
 	}
 
-	@ExceptionHandler({Exception.class})
+	@ExceptionHandler(Exception.class)
 	void handleException(Exception ex) {
 		log.warn(ex.getMessage(), ex);
 		log.warn(ex.getCause().getMessage());
 	}
+
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<Object> handleAll(Exception e) {
+//		String feilmelding = format("rdist001 feilet med feilmelding=%s", e.getMessage());
+//
+//		log.warn(feilmelding, e);
+//
+//		return getResponseEntity(INTERNAL_SERVER_ERROR, feilmelding);
+//	}
 
 	private static String badRequestHttpPage() {
 		return """

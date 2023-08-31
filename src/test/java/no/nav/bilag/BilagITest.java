@@ -1,16 +1,23 @@
 package no.nav.bilag;
 
+import jakarta.servlet.ServletException;
+import no.nav.bilag.auth.LoginFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -28,6 +35,7 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 @ActiveProfiles("itest")
 @AutoConfigureWebTestClient
 @Disabled // Denne testklassa er work in progress, og fungerer ikkje per no grunna innloggingsflyten
+@ExtendWith(MockitoExtension.class)
 public class BilagITest {
 
 	private static final String HENTDOKUMENT_URL = "/rest/hentdokument/";
@@ -44,8 +52,11 @@ public class BilagITest {
 	@Autowired
 	public WebTestClient webTestClient;
 
+	@MockBean
+	LoginFilter loginFilter;
+
 	@BeforeEach
-	void setUp() {
+	void setUp() throws ServletException, IOException {
 		stubAzure();
 		stubBrevserver();
 	}
