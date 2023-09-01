@@ -1,54 +1,76 @@
 package no.nav.bilag;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
+import no.nav.bilag.exceptions.BrevserverFunctionalException;
+import no.nav.bilag.exceptions.BrevserverTechnicalException;
+import no.nav.bilag.exceptions.DokumentIkkeFunnetException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.stream.Collectors;
-
-import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.TEXT_HTML;
 
 @Slf4j
 @ControllerAdvice
 public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-		String feilmelding = ex.getFieldErrors().stream()
-				.map(it -> format("%s, mottatt %s=%s", it.getDefaultMessage(), it.getField(), it.getRejectedValue()))
-				.collect(Collectors.joining(". "));
+	@ExceptionHandler({
+				ConstraintViolationException.class, // feiler Positive-annotasjonen
+				MethodArgumentTypeMismatchException.class // får inn string i stedet for Long etc.
+	})
+	public ResponseEntity<Object> invalidInputHandler(Exception e) {
+		log.warn("Ugyldig inputdata til hentDokument med feilmelding={}", e.getMessage(), e);
 
-		log.warn("Validering av request feilet med feil={}", feilmelding, ex);
-
-		return ResponseEntity.status(BAD_REQUEST)
+		return ResponseEntity
+				.status(BAD_REQUEST)
 				.contentType(TEXT_HTML)
-				.body(badRequestHttpPage());
+				.body(badRequestHtml());
 	}
 
-	@ExceptionHandler(Exception.class)
-	void handleException(Exception ex) {
-		log.warn(ex.getMessage(), ex);
-		log.warn(ex.getCause().getMessage());
+	@ExceptionHandler({DokumentIkkeFunnetException.class})
+	public ResponseEntity<Object> dokumentIkkeFunnetHandler(Exception e) {
+		log.warn("Dokument ikke funnet i brevserver med feilmelding={}", e.getMessage(), e);
+
+		return ResponseEntity
+				.status(NOT_FOUND)
+				.contentType(TEXT_HTML)
+				.body(dokumentIkkeFunnetHtml());
 	}
 
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<Object> handleAll(Exception e) {
-//		String feilmelding = format("rdist001 feilet med feilmelding=%s", e.getMessage());
-//
-//		log.warn(feilmelding, e);
-//
-//		return getResponseEntity(INTERNAL_SERVER_ERROR, feilmelding);
-//	}
+	@ExceptionHandler({BrevserverTechnicalException.class})
+	public ResponseEntity<Object> tekniskFeilHandler(Exception e) {
+		log.warn("Teknisk feil med feilmelding={}", e.getMessage(), e);
 
-	private static String badRequestHttpPage() {
+		return ResponseEntity
+				.status(INTERNAL_SERVER_ERROR)
+				.contentType(TEXT_HTML)
+				.body(tekniskFeilHtml());
+	}
+
+	@ExceptionHandler({BrevserverFunctionalException.class})
+	public ResponseEntity<Object> funksjonellFeilHandler(Exception e) {
+		log.warn("Funksjonell feil med feilmelding={}", e.getMessage(), e);
+
+		return ResponseEntity
+				.status(INTERNAL_SERVER_ERROR) // TODO: Annan status?
+				.contentType(TEXT_HTML)
+				.body(funksjonellFeilHtml());
+	}
+
+	@ExceptionHandler({Exception.class})
+	public ResponseEntity<Object> catchAll(Exception e) {
+		log.warn("Exception i catchall er: " + e);
+
+		return null;
+	}
+
+	private static String badRequestHtml() {
 		return """
 				<!DOCTYPE html>
 				<html lang="no">
@@ -64,4 +86,56 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 				</html>
 				""";
 	}
+
+	private static String dokumentIkkeFunnetHtml() {
+		return """
+				<!DOCTYPE html>
+				<html lang="no">
+				<head>
+					<meta charset="UTF-8">
+				    <title>Dokument ikke funnet</title>
+				</head>
+				<body>
+				    <h1>Fant ikke dokumentet</h1>
+				    <p>Det kan være at dokumentet fremdeles er under oppretting, eller det kan ha feilet under produksjon.</p>
+				    <p>Prøv igjen med en gyldig dokumentId, eller kontakt Team Dokumentløsninger gjennom brukerstøtte eller på Slack-kanalen #team_dokumentløsninger.</p>
+				</body>
+				</html>
+				""";
+	}
+
+	private static String tekniskFeilHtml() {
+		return """
+				<!DOCTYPE html>
+				<html lang="no">
+				<head>
+					<meta charset="UTF-8">
+				    <title>Teknisk feil</title>
+				</head>
+				<body>
+				    <h1>Teknisk feil</h1>
+				    <p>Feilen kan komme av problem med bakenforliggende systemer.</p>
+				    <p>Prøv igjen med en gyldig dokumentId, eller kontakt Team Dokumentløsninger gjennom brukerstøtte eller på Slack-kanalen #team_dokumentløsninger.</p>
+				</body>
+				</html>
+				""";
+	}
+
+	private static String funksjonellFeilHtml() {
+		return """
+				<!DOCTYPE html>
+				<html lang="no">
+				<head>
+					<meta charset="UTF-8">
+				    <title>Funksjonell feil</title>
+				</head>
+				<body>
+				    <h1>Funksjonell feil</h1>
+				    <p>Det kan være flere grunner til denne feilen.</>
+				    <p>Prøv igjen med en gyldig dokumentId, eller kontakt Team Dokumentløsninger gjennom brukerstøtte eller på Slack-kanalen #team_dokumentløsninger.</p>
+				</body>
+				</html>
+				""";
+	}
+
 }
