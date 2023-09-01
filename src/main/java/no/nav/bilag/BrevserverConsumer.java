@@ -10,9 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import static java.lang.String.format;
-import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 
 @Slf4j
 @Component
@@ -30,11 +27,6 @@ public class BrevserverConsumer {
 				.build();
 	}
 
-	private void setContentDisposition(HttpHeaders headers, Long dokId) {
-		headers.add(CONTENT_TYPE, APPLICATION_PDF_VALUE);
-		headers.add(CONTENT_DISPOSITION, format("inline; filename=\"OEBS_%s.pdf\"", dokId));
-	}
-
 	private void setAuthorization(HttpHeaders headers, String accessToken) {
 		headers.setBearerAuth(oboTokenService.fetchAccessToken(accessToken));
 	}
@@ -47,7 +39,6 @@ public class BrevserverConsumer {
 						.path("/{dokId}")
 						.build(dokId))
 				.headers(headers -> {
-					setContentDisposition(headers, dokId);
 					setAuthorization(headers, accessToken);
 				})
 				.retrieve()
