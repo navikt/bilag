@@ -2,6 +2,7 @@ package no.nav.bilag;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.bilag.auth.OboTokenService;
+import no.nav.bilag.config.NavHeadersFilter;
 import no.nav.bilag.exceptions.BrevserverFunctionalException;
 import no.nav.bilag.exceptions.BrevserverTechnicalException;
 import no.nav.bilag.exceptions.DokumentIkkeFunnetException;
@@ -29,6 +30,7 @@ public class BrevserverConsumer {
 		this.oboTokenService = oboTokenService;
 		this.webClient = webClient.mutate()
 				.baseUrl(bilagProperties.getEndpoints().getBrevserver().getUrl())
+				.filter(new NavHeadersFilter())
 				.exchangeStrategies(ExchangeStrategies.builder()
 						.codecs(clientCodecConfigurer -> clientCodecConfigurer
 								.defaultCodecs().maxInMemorySize((int) codecProperties.getMaxInMemorySize().toBytes()))
@@ -48,9 +50,7 @@ public class BrevserverConsumer {
 				.uri(uriBuilder -> uriBuilder
 						.path("/{dokId}")
 						.build(dokId))
-				.headers(headers -> {
-					setAuthorization(headers, accessToken);
-				})
+				.headers(headers -> setAuthorization(headers, accessToken))
 				.retrieve()
 				.bodyToMono(byte[].class)
 				.doOnError(this::handleError)

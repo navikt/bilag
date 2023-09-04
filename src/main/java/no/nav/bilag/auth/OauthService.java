@@ -204,4 +204,17 @@ public class OauthService {
 			throw new TokenAcquisitionException("Technical error when attempting to acquire tokens", e);
 		}
 	}
+
+	public Optional<NavJwtClaimSet> getJwtClaimsSet(HttpSession session) {
+		return getOAuth2AuthorizationFromSession(session)
+				.map(AccessToken::getValue)
+				.map(s -> {
+					try {
+						return SignedJWT.parse(s).getJWTClaimsSet();
+					} catch (java.text.ParseException e) {
+						return null;
+					}
+				})
+				.map(NavJwtClaimSet::new);
+	}
 }
