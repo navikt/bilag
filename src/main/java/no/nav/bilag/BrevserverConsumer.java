@@ -5,9 +5,11 @@ import no.nav.bilag.auth.OboTokenService;
 import no.nav.bilag.exceptions.BrevserverFunctionalException;
 import no.nav.bilag.exceptions.BrevserverTechnicalException;
 import no.nav.bilag.exceptions.DokumentIkkeFunnetException;
+import org.springframework.boot.autoconfigure.codec.CodecProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -22,10 +24,15 @@ public class BrevserverConsumer {
 
 	public BrevserverConsumer(BilagProperties bilagProperties,
 							  OboTokenService oboTokenService,
-							  WebClient webClient) {
+							  WebClient webClient,
+							  CodecProperties codecProperties) {
 		this.oboTokenService = oboTokenService;
 		this.webClient = webClient.mutate()
 				.baseUrl(bilagProperties.getEndpoints().getBrevserver().getUrl())
+				.exchangeStrategies(ExchangeStrategies.builder()
+						.codecs(clientCodecConfigurer -> clientCodecConfigurer
+								.defaultCodecs().maxInMemorySize((int) codecProperties.getMaxInMemorySize().toBytes()))
+						.build())
 				.build();
 	}
 

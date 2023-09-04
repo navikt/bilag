@@ -22,7 +22,8 @@ public class BilagController {
 	private final BrevserverConsumer brevserverConsumer;
 	private final OauthService oauthService;
 
-	public BilagController(BrevserverConsumer brevserverConsumer, OauthService oauthService) {
+	public BilagController(BrevserverConsumer brevserverConsumer,
+						   OauthService oauthService) {
 		this.brevserverConsumer = brevserverConsumer;
 		this.oauthService = oauthService;
 	}
