@@ -1,4 +1,4 @@
-package no.nav.bilag.config;
+package no.nav.bilag.mdc;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

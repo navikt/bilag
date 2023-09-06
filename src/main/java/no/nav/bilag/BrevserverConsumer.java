@@ -2,7 +2,7 @@ package no.nav.bilag;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.bilag.auth.OboTokenService;
-import no.nav.bilag.config.NavHeadersFilter;
+import no.nav.bilag.webclient.NavHeadersFilter;
 import no.nav.bilag.exceptions.BrevserverFunctionalException;
 import no.nav.bilag.exceptions.BrevserverTechnicalException;
 import no.nav.bilag.exceptions.DokumentIkkeFunnetException;

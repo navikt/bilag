@@ -1,4 +1,4 @@
-package no.nav.bilag.config;
+package no.nav.bilag.mdc;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -1,0 +1,11 @@
+{
+  "APP_NAME": "bilag",
+  "MIN_REPLICAS": 1,
+  "MAX_REPLICAS": 1,
+  "INGRESS": "https://bilag.intern.nav.no",
+  "BILAG_AZURE_SCOPE": "api://prod-fss.teamdokumenthandtering.bilag/.default",
+  "BILAG_BASE_URL": "https://bilag.intern.nav.no",
+  "BILAG_ENDPOINTS_BREVSERVER_URL": "https://brevserver-nais.intern.nav.no/brevweb/rest/hentdokument",
+  "BILAG_ENDPOINTS_BREVSERVER_SCOPE": "api://prod-fss.teamdokumenthandtering.brevserver-nais/.default",
+  "APPDYNAMICS": "/apikey/appdynamics/prod"
+}

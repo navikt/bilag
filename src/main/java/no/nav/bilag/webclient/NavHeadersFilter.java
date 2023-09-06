@@ -1,4 +1,4 @@
-package no.nav.bilag.config;
+package no.nav.bilag.webclient;
 
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -6,8 +6,8 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
 import reactor.core.publisher.Mono;
 
-import static no.nav.bilag.config.MDCInterceptor.getCallId;
-import static no.nav.bilag.config.MDCInterceptor.getUserId;
+import static no.nav.bilag.mdc.MDCInterceptor.getCallId;
+import static no.nav.bilag.mdc.MDCInterceptor.getUserId;
 
 public class NavHeadersFilter implements ExchangeFilterFunction {
 

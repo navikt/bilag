@@ -35,7 +35,6 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 @ActiveProfiles("itest")
 @AutoConfigureWebTestClient
 @Disabled // Denne testklassa er work in progress, og fungerer ikkje per no grunna innloggingsflyten
-@ExtendWith(MockitoExtension.class)
 public class BilagITest {
 
 	private static final String HENTDOKUMENT_URL = "/rest/hentdokument/";
