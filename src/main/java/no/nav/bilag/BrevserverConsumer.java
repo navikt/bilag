@@ -1,6 +1,9 @@
 package no.nav.bilag;
 
+import com.nimbusds.oauth2.sdk.token.AccessToken;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.bilag.auth.OauthService;
 import no.nav.bilag.auth.OboTokenService;
 import no.nav.bilag.webclient.NavHeadersFilter;
 import no.nav.bilag.exceptions.BrevserverFunctionalException;
@@ -21,13 +24,15 @@ import static java.lang.String.format;
 public class BrevserverConsumer {
 
 	private final WebClient webClient;
+	private final OauthService oauthService;
 	private final OboTokenService oboTokenService;
 
 	public BrevserverConsumer(BilagProperties bilagProperties,
 							  OboTokenService oboTokenService,
 							  WebClient webClient,
-							  CodecProperties codecProperties) {
+							  CodecProperties codecProperties, OauthService oauthService) {
 		this.oboTokenService = oboTokenService;
+		this.oauthService = oauthService;
 		this.webClient = webClient.mutate()
 				.baseUrl(bilagProperties.getEndpoints().getBrevserver().getUrl())
 				.filter(new NavHeadersFilter())
@@ -43,14 +48,17 @@ public class BrevserverConsumer {
 	}
 
 	@Retryable(retryFor = BrevserverFunctionalException.class)
-	public byte[] hentDokument(Long dokId, String accessToken) {
+	public byte[] hentDokument(Long dokId, HttpSession session) {
+
+		String bearerToken = hentBearerTokenFraSession(session);
+
 		log.info("hentDokument henter dokument med dokId={} fra brevserver", dokId);
 
 		var response = webClient.get()
 				.uri(uriBuilder -> uriBuilder
 						.path("/{dokId}")
 						.build(dokId))
-				.headers(headers -> setAuthorization(headers, accessToken))
+				.headers(headers -> setAuthorization(headers, bearerToken))
 				.retrieve()
 				.bodyToMono(byte[].class)
 				.doOnError(this::handleError)
@@ -59,6 +67,11 @@ public class BrevserverConsumer {
 		log.info("hentDokument har hentet dokument med dokId={} fra brevserver", dokId);
 
 		return response;
+	}
+
+	private String hentBearerTokenFraSession(HttpSession session) {
+		AccessToken rawAccessToken = oauthService.getOAuth2AuthorizationFromSession(session).get();
+		return rawAccessToken.getValue();
 	}
 
 	private void handleError(Throwable error) {
