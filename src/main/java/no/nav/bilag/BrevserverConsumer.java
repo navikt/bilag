@@ -31,8 +31,9 @@ public class BrevserverConsumer {
 
 	public BrevserverConsumer(BilagProperties bilagProperties,
 							  OboTokenService oboTokenService,
+							  OauthService oauthService,
 							  WebClient webClient,
-							  CodecProperties codecProperties, OauthService oauthService) {
+							  CodecProperties codecProperties) {
 		this.oboTokenService = oboTokenService;
 		this.oauthService = oauthService;
 		this.webClient = webClient.mutate()
