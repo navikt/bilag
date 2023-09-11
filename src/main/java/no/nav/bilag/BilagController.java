@@ -9,8 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
-import static org.springframework.http.MediaType.valueOf;
+import static org.springframework.http.MediaType.APPLICATION_PDF;
 
 @Slf4j
 @Validated
@@ -31,7 +30,7 @@ public class BilagController {
 
 		log.info("hentDokument har hentet dokument med dokId={}", dokId);
 
-		return ResponseEntity.ok().contentType(valueOf(APPLICATION_PDF_VALUE)).body(dokument);
+		return ResponseEntity.ok().contentType(APPLICATION_PDF).body(dokument);
 	}
 
 }

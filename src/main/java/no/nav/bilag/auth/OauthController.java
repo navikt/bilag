@@ -2,7 +2,6 @@ package no.nav.bilag.auth;
 
 import com.nimbusds.oauth2.sdk.AuthorizationGrant;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.bilag.exceptions.TokenAcquisitionException;
 import no.nav.bilag.exceptions.UserAuthorizationException;
@@ -22,23 +21,11 @@ import static org.springframework.http.HttpStatus.TEMPORARY_REDIRECT;
 public class OauthController {
 
 	public static final String OAUTH_CALLBACK_PATH = "/oauth2/callback";
-	private static final String ME_PATH = "/oauth2/me";
 
 	private final OauthService oauthService;
 
 	public OauthController(OauthService oauthService) {
 		this.oauthService = oauthService;
-	}
-
-	@GetMapping(path = ME_PATH)
-	public ResponseEntity<String> whoami(HttpSession session) {
-		return oauthService.getJwtClaimsSet(session)
-				.map(jwtClaimsSet -> "{" +
-									 "\"NAVident\":\"" + jwtClaimsSet.getNavIdent() + "\"," +
-									 "\"name\":\"" + jwtClaimsSet.getName() + "\"" +
-									 "}")
-				.map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.ok("{}"));
 	}
 
 	@GetMapping(path = OAUTH_CALLBACK_PATH)

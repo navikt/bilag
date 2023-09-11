@@ -58,16 +58,19 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 		log.warn("Funksjonell feil med feilmelding={}", e.getMessage(), e);
 
 		return ResponseEntity
-				.status(INTERNAL_SERVER_ERROR) // TODO: Annan status?
+				.status(INTERNAL_SERVER_ERROR)
 				.contentType(TEXT_HTML)
 				.body(funksjonellFeilHtml());
 	}
 
 	@ExceptionHandler({Exception.class})
-	public ResponseEntity<Object> catchAll(Exception e) {
-		log.warn("Exception i catchall er: " + e);
+	public ResponseEntity<Object> catchUnhandledExceptions(Exception e) {
+		log.warn("Uhåndtert execption: " + e);
 
-		return null;
+		return ResponseEntity
+				.status(INTERNAL_SERVER_ERROR)
+				.contentType(TEXT_HTML)
+				.body(ukjentTekniskFeilHtml());
 	}
 
 	private static String badRequestHtml() {
@@ -133,6 +136,22 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 				    <h1>Funksjonell feil</h1>
 				    <p>Det kan være flere grunner til denne feilen.</>
 				    <p>Prøv igjen med en gyldig dokumentId, eller kontakt Team Dokumentløsninger gjennom brukerstøtte eller på Slack-kanalen #team_dokumentløsninger.</p>
+				</body>
+				</html>
+				""";
+	}
+
+	private static String ukjentTekniskFeilHtml() {
+		return """
+				<!DOCTYPE html>
+				<html lang="no">
+				<head>
+					<meta charset="UTF-8">
+				    <title>Uhåndtert teknisk feil</title>
+				</head>
+				<body>
+				    <h1>Uhåndtert teknisk feil</h1>
+				    <p>Prøv igjen senere. Ved vedvarende problemer kan du kontakte Team Dokumentløsninger gjennom brukerstøtte eller på Slack-kanalen #team_dokumentløsninger.</p>
 				</body>
 				</html>
 				""";

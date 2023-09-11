@@ -23,6 +23,8 @@ import static java.lang.String.format;
 @Component
 public class BrevserverConsumer {
 
+	private static final String BREVSERVER_HENTDOKUMENT_URI = "/rest/hentdokument/{dokId}";
+
 	private final WebClient webClient;
 	private final OauthService oauthService;
 	private final OboTokenService oboTokenService;
@@ -43,10 +45,6 @@ public class BrevserverConsumer {
 				.build();
 	}
 
-	private void setAuthorization(HttpHeaders headers, String accessToken) {
-		headers.setBearerAuth(oboTokenService.fetchAccessToken(accessToken));
-	}
-
 	@Retryable(retryFor = BrevserverFunctionalException.class)
 	public byte[] hentDokument(Long dokId, HttpSession session) {
 
@@ -55,9 +53,7 @@ public class BrevserverConsumer {
 		log.info("hentDokument henter dokument med dokId={} fra brevserver", dokId);
 
 		var response = webClient.get()
-				.uri(uriBuilder -> uriBuilder
-						.path("/{dokId}")
-						.build(dokId))
+				.uri(BREVSERVER_HENTDOKUMENT_URI, dokId)
 				.headers(headers -> setAuthorization(headers, bearerToken))
 				.retrieve()
 				.bodyToMono(byte[].class)
@@ -72,6 +68,10 @@ public class BrevserverConsumer {
 	private String hentBearerTokenFraSession(HttpSession session) {
 		AccessToken rawAccessToken = oauthService.getOAuth2AuthorizationFromSession(session).get();
 		return rawAccessToken.getValue();
+	}
+
+	private void setAuthorization(HttpHeaders headers, String accessToken) {
+		headers.setBearerAuth(oboTokenService.fetchAccessToken(accessToken));
 	}
 
 	private void handleError(Throwable error) {
@@ -93,8 +93,7 @@ public class BrevserverConsumer {
 
 		if (response.getStatusCode().is4xxClientError()) {
 			if (response.getStatusCode().value() == 404) {
-				var feil = "Fant ikke dokument";
-				throw new DokumentIkkeFunnetException(feil, error);
+				throw new DokumentIkkeFunnetException("Fant ikke dokument", error);
 			}
 			throw new BrevserverFunctionalException(feilmelding, error);
 		} else {
