@@ -8,9 +8,16 @@ metadata:
 spec:
   image: {{ image }}
   ingresses:
-    {{#each INGRESSES}}
-       - {{this }}
-      {{/each}}
+    - {{ INGRESS }}
+  env:
+    - name: BILAG_ENDPOINTS_BREVSERVER_URL
+      value: {{ BILAG_ENDPOINTS_BREVSERVER_URL }}
+    - name: BILAG_ENDPOINTS_BREVSERVER_SCOPE
+      value: {{ BILAG_ENDPOINTS_BREVSERVER_SCOPE }}
+    - name: BILAG_BASE_URL
+      value: {{ BILAG_BASE_URL }}
+    - name: BILAG_AZURE_SCOPE
+      value: {{ BILAG_AZURE_SCOPE }}
   liveness:
     path: /actuator/health/liveness
     initialDelay: 20
@@ -23,6 +30,25 @@ spec:
   prometheus:
     enabled: true
     path: /actuator/prometheus
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
+      claims:
+        extra:
+          - "NAVident"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: ida
+          namespace: traktor
+          cluster: prod-fss
+  webproxy: true
+  vault:
+    enabled: true
+    paths:
+      - kvPath: {{ APPDYNAMICS }}
+        mountPath: /var/run/secrets/nais.io/appdynamics
   replicas:
     min: {{ MIN_REPLICAS }}
     max: {{ MAX_REPLICAS }}
