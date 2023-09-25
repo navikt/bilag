@@ -29,6 +29,7 @@ public class LoginFilterTest {
 	private final String CALLBACK_PATH = "/oauth2/callback";
 	private final String READINESS_PATH = "/actuator/health/readiness";
 	private final String LIVENESS_PATH = "/actuator/health/liveness";
+	private final String METRICS_PATH = "/actuator/prometheus";
 
 	@Mock
 	HttpServletRequest httpServletRequest;
@@ -56,7 +57,7 @@ public class LoginFilterTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {CALLBACK_PATH, READINESS_PATH, LIVENESS_PATH})
+	@ValueSource(strings = {CALLBACK_PATH, READINESS_PATH, LIVENESS_PATH, METRICS_PATH})
 	void skalIkkeGiRedirectForSpesifikkeEndepunkt(String path) throws ServletException, IOException {
 		when(httpServletRequest.getRequestURI()).thenReturn(path);
 
