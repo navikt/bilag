@@ -1,6 +1,7 @@
 package no.nav.bilag;
 
 import com.nimbusds.jose.util.JSONObjectUtils;
+import com.nimbusds.oauth2.sdk.ParseException;
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
 import net.minidev.json.JSONObject;
 import no.nav.bilag.auth.OauthService;
@@ -15,7 +16,6 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.text.ParseException;
 import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -26,6 +26,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -74,11 +75,10 @@ public class BilagITest {
 				.expectStatus().isTemporaryRedirect();
 	}
 
-	@Test
-	void skalHenteDokument() throws ParseException, com.nimbusds.oauth2.sdk.ParseException {
+	@ParameterizedTest
+	@ValueSource(strings = {"0123", "2345"})
+	void skalHenteDokument(String dokId) {
 		mockGetTokenFromSession();
-
-		long dokId = 123L;
 		stubOkFraBrevserver(dokId);
 
 		var response = webTestClient.get()
@@ -93,10 +93,10 @@ public class BilagITest {
 	}
 
 	@Test
-	void skalReturnereNotFoundHvisBrevserverIkkeFinnerDokumentet() throws ParseException, com.nimbusds.oauth2.sdk.ParseException {
+	void skalReturnereNotFoundHvisBrevserverIkkeFinnerDokumentet() {
 		mockGetTokenFromSession();
 
-		long dokId = 456L;
+		String dokId = "456";
 		stubResponsFraBrevserver(NOT_FOUND.value(), dokId);
 
 		var body = webTestClient.get()
@@ -111,8 +111,8 @@ public class BilagITest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(longs = {-1, 0})
-	void skalReturnereBadRequestForUgyldigDokId(Long dokId) throws ParseException, com.nimbusds.oauth2.sdk.ParseException {
+	@ValueSource(strings = {" ", "-1", "123a", "100000000000000000000000000000000"})
+	void skalReturnereBadRequestForUgyldigDokId(String dokId) {
 		mockGetTokenFromSession();
 
 		var body = webTestClient.get()
@@ -127,10 +127,10 @@ public class BilagITest {
 	}
 
 	@Test
-	void skalReturnereFunksjonellFeilFor4xxStatuskoderUlik404FraBrevserver() throws ParseException, com.nimbusds.oauth2.sdk.ParseException {
+	void skalReturnereFunksjonellFeilFor4xxStatuskoderUlik404FraBrevserver() {
 		mockGetTokenFromSession();
 
-		long dokId = 123L;
+		String dokId = "123";
 		stubResponsFraBrevserver(PAYLOAD_TOO_LARGE.value(), dokId);
 
 		var body = webTestClient.get()
@@ -145,10 +145,10 @@ public class BilagITest {
 	}
 
 	@Test
-	void skalReturnereTekniskFeilForInternalServerErrorFraBrevserver() throws ParseException, com.nimbusds.oauth2.sdk.ParseException {
+	void skalReturnereTekniskFeilForInternalServerErrorFraBrevserver() {
 		mockGetTokenFromSession();
 
-		long dokId = 123L;
+		String dokId = "123";
 		stubResponsFraBrevserver(INTERNAL_SERVER_ERROR.value(), dokId);
 
 		var body = webTestClient.get()
@@ -162,8 +162,13 @@ public class BilagITest {
 		assertThat(body).contains("Teknisk feil");
 	}
 
-	private void mockGetTokenFromSession() throws com.nimbusds.oauth2.sdk.ParseException, ParseException {
-		when(oauthService.getOAuth2AuthorizationFromSession(any())).thenReturn(Optional.of(BearerAccessToken.parse(new JSONObject(JSONObjectUtils.parse(ACCESS_TOKEN_RESPONSE_BODY)))));
+	private void mockGetTokenFromSession() {
+		try {
+			when(oauthService.getOAuth2AuthorizationFromSession(any()))
+					.thenReturn(Optional.of(BearerAccessToken.parse(new JSONObject(JSONObjectUtils.parse(ACCESS_TOKEN_RESPONSE_BODY)))));
+		} catch (ParseException | java.text.ParseException e) {
+			fail("Klarte ikke parse stubbed token", e);
+		}
 	}
 
 	private void stubAzureObo() {
@@ -174,7 +179,7 @@ public class BilagITest {
 						.withBody(ACCESS_TOKEN_RESPONSE_BODY)));
 	}
 
-	private void stubOkFraBrevserver(Long dokId) {
+	private void stubOkFraBrevserver(String dokId) {
 		stubFor(get(urlPathMatching(format(BREVSERVER_HENTDOKUMENT_ENDEPUNKT, dokId)))
 				.willReturn(aResponse()
 						.withStatus(OK.value())
@@ -182,7 +187,7 @@ public class BilagITest {
 						.withBody("bilagsdokument")));
 	}
 
-	private void stubResponsFraBrevserver(int httpStatus, Long dokId) {
+	private void stubResponsFraBrevserver(int httpStatus, String dokId) {
 		stubFor(get(urlPathMatching(format(BREVSERVER_HENTDOKUMENT_ENDEPUNKT, dokId)))
 				.willReturn(aResponse()
 						.withStatus(httpStatus)));

@@ -83,7 +83,7 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 				</head>
 				<body>
 				    <h1>DokId er ikke en gyldig dokumentId</h1>
-				    <p>Dokid må bestå av et positivt tall.</p>
+				    <p>DokId må være et 1-32 langt numerisk siffer.</p>
 				    <p>Prøv igjen med en gyldig dokumentId, eller kontakt Team Dokumentløsninger gjennom brukerstøtte eller på Slack-kanalen #team_dokumentløsninger.</p>
 				</body>
 				</html>
