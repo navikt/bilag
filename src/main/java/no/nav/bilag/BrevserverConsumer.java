@@ -5,10 +5,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.bilag.auth.OauthService;
 import no.nav.bilag.auth.OboTokenService;
-import no.nav.bilag.webclient.NavHeadersFilter;
 import no.nav.bilag.exceptions.BrevserverFunctionalException;
 import no.nav.bilag.exceptions.BrevserverTechnicalException;
 import no.nav.bilag.exceptions.DokumentIkkeFunnetException;
+import no.nav.bilag.webclient.NavHeadersFilter;
 import org.springframework.boot.autoconfigure.codec.CodecProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.retry.annotation.Retryable;
@@ -47,7 +47,7 @@ public class BrevserverConsumer {
 	}
 
 	@Retryable(retryFor = BrevserverFunctionalException.class)
-	public byte[] hentDokument(Long dokId, HttpSession session) {
+	public byte[] hentDokument(String dokId, HttpSession session) {
 
 		String bearerToken = hentBearerTokenFraSession(session);
 
