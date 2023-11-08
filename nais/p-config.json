@@ -3,7 +3,12 @@
   "MIN_REPLICAS": 1,
   "MAX_REPLICAS": 1,
   "INGRESS": "https://bilag.intern.nav.no",
-  "OEBS_REGNSKAP_AD_GROUP_ID_FOR_READ_ACCESS": "",
+  "REGNSKAP_AD_GROUP_OBJECT_IDS": [
+    {
+      "id": "f800aca1-6644-4df7-9878-083b4d234755",
+      "navn": "0000-GA-OEBS-NATIVE"
+    }
+  ],
   "BILAG_AZURE_SCOPE": "api://prod-fss.teamdokumenthandtering.bilag/.default",
   "BILAG_BASE_URL": "https://bilag.intern.nav.no",
   "BILAG_ENDPOINTS_BREVSERVER_URL": "https://brevserver-nais.intern.nav.no/brevweb",

@@ -38,7 +38,9 @@ spec:
         extra:
           - "NAVident"
         groups:
-          - id: {{ OEBS_REGNSKAP_AD_GROUP_ID_FOR_READ_ACCESS }}
+          {{#each REGNSKAP_AD_GROUP_OBJECT_IDS}}
+          - id: {{ id }}
+          {{/each}}
   accessPolicy:
     inbound:
       rules:
