@@ -3,6 +3,12 @@
   "MIN_REPLICAS": 1,
   "MAX_REPLICAS": 1,
   "INGRESS": "https://bilag-q1.dev.intern.nav.no",
+  "REGNSKAP_AD_GROUP_OBJECT_IDS": [
+    {
+      "id": "877eae90-48ec-4b2f-9495-01ab6a4a42e3",
+      "navn": "0000-GA-Varseladmin"
+    }
+  ],
   "BILAG_AZURE_SCOPE": "api://dev-fss.teamdokumenthandtering.bilag-q1/.default",
   "BILAG_BASE_URL": "https://bilag-q1.dev.intern.nav.no",
   "BILAG_ENDPOINTS_BREVSERVER_URL": "https://brevserver-nais-q1.dev.intern.nav.no/brevweb",

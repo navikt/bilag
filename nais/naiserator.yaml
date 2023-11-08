@@ -33,10 +33,14 @@ spec:
   azure:
     application:
       enabled: true
-      allowAllUsers: true
+      allowAllUsers: false
       claims:
         extra:
           - "NAVident"
+        groups:
+          {{#each REGNSKAP_AD_GROUP_OBJECT_IDS}}
+          - id: {{ id }}
+          {{/each}}
   accessPolicy:
     inbound:
       rules:

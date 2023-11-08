@@ -29,9 +29,8 @@ public class BilagController {
 											   @Pattern(regexp = "^\\d{1,32}$", message = "dokId må være numerisk og må ha 1-32 siffer")
 											   String dokId,
 											   HttpServletRequest servletRequest) {
-
+		log.info("hentDokument henter dokument med dokId={} fra brevserver", dokId);
 		var dokument = brevserverConsumer.hentDokument(dokId, servletRequest.getSession());
-
 		log.info("hentDokument har hentet dokument med dokId={}", dokId);
 		return ResponseEntity.ok().contentType(APPLICATION_PDF).body(dokument);
 	}

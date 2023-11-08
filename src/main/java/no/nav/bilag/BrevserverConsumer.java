@@ -48,22 +48,15 @@ public class BrevserverConsumer {
 
 	@Retryable(retryFor = BrevserverFunctionalException.class)
 	public byte[] hentDokument(String dokId, HttpSession session) {
-
 		String bearerToken = hentBearerTokenFraSession(session);
 
-		log.info("hentDokument henter dokument med dokId={} fra brevserver", dokId);
-
-		var response = webClient.get()
+		return webClient.get()
 				.uri(BREVSERVER_HENTDOKUMENT_URI, dokId)
 				.headers(headers -> setAuthorization(headers, bearerToken))
 				.retrieve()
 				.bodyToMono(byte[].class)
 				.doOnError(this::handleError)
 				.block();
-
-		log.info("hentDokument har hentet dokument med dokId={} fra brevserver", dokId);
-
-		return response;
 	}
 
 	private String hentBearerTokenFraSession(HttpSession session) {
