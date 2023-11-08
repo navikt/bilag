@@ -7,6 +7,10 @@
     {
       "id": "f800aca1-6644-4df7-9878-083b4d234755",
       "navn": "0000-GA-OEBS-NATIVE"
+    },
+    {
+      "id": "190aa1b1-a7c9-4982-b013-7f24b3f4d027",
+      "navn": "0000-GA-Eye-Share"
     }
   ],
   "BILAG_AZURE_SCOPE": "api://prod-fss.teamdokumenthandtering.bilag/.default",
