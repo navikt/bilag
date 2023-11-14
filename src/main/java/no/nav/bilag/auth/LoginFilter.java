@@ -22,10 +22,11 @@ public class LoginFilter extends GenericFilterBean {
 	public static final String ORIGINAL_URI = "ORIGINAL_URI";
 
 	private static final String CALLBACK_URI = "/oauth2/callback";
-	private static final String READINESS_URI = "/actuator/health/readiness";
-	private static final String LIVENESS_URI = "/actuator/health/liveness";
 	private static final String METRICS_URI = "/actuator/prometheus";
-	private static final List<String> URIS_WITHOUT_REDIRECT = List.of(CALLBACK_URI, READINESS_URI, LIVENESS_URI, METRICS_URI);
+	private static final String HEALTH_URI = "/actuator/health";
+	private static final String LIVENESS_URI = "/actuator/health/liveness";
+	private static final String READINESS_URI = "/actuator/health/readiness";
+	private static final List<String> URIS_WITHOUT_REDIRECT = List.of(CALLBACK_URI, HEALTH_URI, READINESS_URI, LIVENESS_URI, METRICS_URI);
 
 	OauthService oauthService;
 
