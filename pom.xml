@@ -11,12 +11,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.4</version>
+		<version>3.2.1</version>
 	</parent>
 
 	<properties>
 		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
-		<spring-cloud-contract-wiremock.version>4.0.4</spring-cloud-contract-wiremock.version>
+		<spring-cloud-contract-wiremock.version>4.1.0</spring-cloud-contract-wiremock.version>
 	</properties>
 
 	<dependencyManagement>
@@ -40,13 +40,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<!-- GHAS: Snakeyaml-vulnerability for versjon < 2.1, men den er uansett ikke i bruk. Exclusion kan fjernes når SB 3.x.y støtter snakeyaml 2.2 eller høyere. -->
-			<exclusions>
-				<exclusion>
-					<groupId>org.yaml</groupId>
-					<artifactId>snakeyaml</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
