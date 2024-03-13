@@ -7,6 +7,10 @@
     {
       "id": "877eae90-48ec-4b2f-9495-01ab6a4a42e3",
       "navn": "0000-GA-Varseladmin"
+    },
+    {
+      "id": "efb663cf-06a1-4269-aa87-3f65033c64fc",
+      "navn": "0000-GA-Eye-Share"
     }
   ],
   "BILAG_AZURE_SCOPE": "api://dev-fss.teamdokumenthandtering.bilag-q1/.default",
