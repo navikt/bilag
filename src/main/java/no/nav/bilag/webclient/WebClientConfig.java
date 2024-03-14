@@ -15,7 +15,7 @@ public class WebClientConfig {
 	public WebClient webClient(WebClient.Builder webClientBuilder) {
 		HttpClient httpClient = HttpClient.create()
 				.responseTimeout(ofSeconds(20))
-				.proxyWithSystemProperties();;
+				.proxyWithSystemProperties();
 
 		return webClientBuilder
 				.clone()
