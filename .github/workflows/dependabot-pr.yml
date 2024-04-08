@@ -3,20 +3,17 @@ on:
   pull_request:
     branches:
       - 'dependabot/**'
-  pull_request_target:
-    branches:
-      - 'dependabot/**'
-  push:
 
 permissions:
   contents: read
   packages: write
   id-token: write
+  pull-requests: write # kanskje
 
 jobs:
   determine-semver-version:
-    if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
     outputs:
       update-type: ${{ steps.dependabot-metadata.outputs.update-type }}
     steps:
