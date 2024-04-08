@@ -1,8 +1,11 @@
 name: Handle Dependabot PR
 on:
-  push:
+  pull_request_target:
     branches:
       - 'dependabot/**'
+#  push:
+#    branches:
+#      - 'dependabot/**'
 
 permissions:
   contents: read
