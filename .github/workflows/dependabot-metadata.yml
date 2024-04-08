@@ -25,7 +25,7 @@ jobs:
       #  - steps.metadata.outputs.dependency-type
       #  - steps.metadata.outputs.update-type
 
-  build-for-major:
+  handle-major-version:
     needs: determine-semver-version
     permissions:
       contents: read
@@ -34,7 +34,7 @@ jobs:
     uses: navikt/dok-workflows/.github/workflows/build-app-gar.yml@main
     secrets: inherit
 
-  build-deploy:
+  handle-minor-or-patch-version:
     needs: determine-semver-version
     permissions:
       contents: read
