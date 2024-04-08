@@ -8,11 +8,11 @@ permissions:
   repository-projects: write
 
 jobs:
-  dependabot:
+  determine-semver-version:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     outputs:
-      update-type: ${{ steps.dependabot-metadata.outputs.update-type }}
+      update-type: ${{ steps.metadata.outputs.update-type }}
     steps:
       - run: echo 'github.actor=${{ github.actor }}, github.event=${{ github.event }}, github.head_ref=${{ github.head_ref }}, github.event.pull_request.user.login=${{ github.event.pull_request.user.login }}'
       - name: Dependabot metadata
