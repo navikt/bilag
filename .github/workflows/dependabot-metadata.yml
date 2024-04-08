@@ -1,5 +1,8 @@
 name: Dependabot fetch metadata
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - 'dependabot/**'
 
 permissions:
   pull-requests: write
