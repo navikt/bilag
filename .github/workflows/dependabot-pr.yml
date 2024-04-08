@@ -3,9 +3,10 @@ on:
   pull_request:
     branches:
       - 'dependabot/**'
-  push:
+  pull_request_target:
     branches:
       - 'dependabot/**'
+  push:
 
 permissions:
   contents: read
@@ -16,21 +17,27 @@ jobs:
   determine-semver-version:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    outputs:
+      update-type: ${{ steps.dependabot-metadata.outputs.update-type }}
     steps:
       - run: echo 'github.actor=${{ github.actor }}, github.event=${{ github.event }}, github.head_ref=${{ github.head_ref }}'
       - name: Fetch Dependabot metadata
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
 
   build-for-major:
     needs: determine-semver-version
     if: github.actor == 'dependabot[bot]' && needs.determine-semver-version.outputs.update-type == 'version-update:semver-major'
     uses: navikt/dok-workflows/.github/workflows/build-app-gar.yml@main
+    secrets: inherit
 
   build-deploy:
     needs: determine-semver-version
     if: github.actor == 'dependabot[bot]' && needs.determine-semver-version.outputs.update-type != 'version-update:semver-major'
     uses: navikt/dok-workflows/.github/workflows/build-deploy-feature-gar.yml@main
+    secrets: inherit
 
   merge-branch:
     needs: build-deploy
