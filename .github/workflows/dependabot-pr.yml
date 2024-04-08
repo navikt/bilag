@@ -1,6 +1,6 @@
 name: Handle Dependabot PR
 on:
-  pull_request:
+  push:
     branches:
       - 'dependabot/**'
 
