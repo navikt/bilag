@@ -25,6 +25,15 @@ jobs:
       #  - steps.metadata.outputs.dependency-type
       #  - steps.metadata.outputs.update-type
 
+  build-for-major:
+    needs: determine-semver-version
+    permissions:
+      contents: read
+      id-token: write
+    if: github.actor == 'dependabot[bot]' && needs.determine-semver-version.outputs.update-type == 'version-update:semver-major'
+    uses: navikt/dok-workflows/.github/workflows/build-app-gar.yml@main
+    secrets: inherit
+
   build-deploy:
     needs: determine-semver-version
     permissions:
