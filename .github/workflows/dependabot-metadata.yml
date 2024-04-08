@@ -27,6 +27,10 @@ jobs:
 
   build-deploy:
     needs: determine-semver-version
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     if: github.actor == 'dependabot[bot]' && needs.determine-semver-version.outputs.update-type != 'version-update:semver-major'
     uses: navikt/dok-workflows/.github/workflows/build-deploy-feature-gar.yml@main
     secrets: inherit
