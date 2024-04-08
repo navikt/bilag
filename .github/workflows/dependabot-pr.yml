@@ -17,6 +17,7 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
+      - run: echo 'github.actor=${{ github.actor }}, github.event=${{ github.event }}, github.head_ref=${{ github.head_ref }}'
       - name: Fetch Dependabot metadata
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v1
