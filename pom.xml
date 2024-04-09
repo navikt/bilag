@@ -16,7 +16,7 @@
 
 	<properties>
 		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
-		<spring-cloud-contract-wiremock.version>4.1.1</spring-cloud-contract-wiremock.version>
+		<spring-cloud-contract-wiremock.version>4.1.2</spring-cloud-contract-wiremock.version>
 	</properties>
 
 	<dependencyManagement>
