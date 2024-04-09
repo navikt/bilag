@@ -14,7 +14,6 @@ jobs:
     outputs:
       update-type: ${{ steps.metadata.outputs.update-type }}
     steps:
-      - run: echo 'github.actor=${{ github.actor }}, github.event=${{ github.event }}, github.head_ref=${{ github.head_ref }}, github.event.pull_request.user.login=${{ github.event.pull_request.user.login }}'
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v1
