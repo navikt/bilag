@@ -1,4 +1,4 @@
-name: Dependabot auto-merge
+name: Dependabot auto-merge if build succeeds
 on:
   pull_request:
 
