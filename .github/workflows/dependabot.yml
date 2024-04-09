@@ -5,7 +5,6 @@ on:
 permissions:
   contents: write
   packages: write
-  pull-requests: write
 
 jobs:
   dependabot:
@@ -19,18 +18,23 @@ jobs:
         uses: dependabot/fetch-metadata@v1
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Enable auto-merge for Dependabot PRs with minor or patch version
-        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   handle-minor-or-patch-version:
     needs: dependabot
     permissions:
       contents: read
       id-token: write
-    if: github.actor == 'dependabot[bot]' && needs.dependabot.outputs.update-type != 'version-update:semver-major'
+    if: needs.dependabot.outputs.update-type != 'version-update:semver-major'
     uses: navikt/dok-workflows/.github/workflows/build-app-gar.yml@main
     secrets: inherit
+
+  merge-dependabot-branch:
+    needs: handle-minor-or-patch-version
+    runs-on: ubuntu-latest
+    if: needs.dependabot.outputs.update-type != 'version-update:semver-major'
+    steps:
+      - name: Merge PR
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
