@@ -15,6 +15,8 @@
 	</parent>
 
 	<properties>
+		<java.version>21</java.version>
+
 		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
 		<spring-cloud-contract-wiremock.version>4.1.2</spring-cloud-contract-wiremock.version>
 	</properties>
