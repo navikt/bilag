@@ -14,3 +14,5 @@ jobs:
     if: ${{ github.actor == 'dependabot[bot]' }}
     uses: navikt/dok-workflows/.github/workflows/label-dependabot-pr.yml@main
     secrets: inherit
+    with:
+      java-version: '21'
