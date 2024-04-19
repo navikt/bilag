@@ -1,7 +1,7 @@
 name: Label Dependabot PR on successful build
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
 
 jobs:
   label-dependabot-pr:
