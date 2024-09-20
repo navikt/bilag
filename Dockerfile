@@ -1,9 +1,7 @@
-FROM ghcr.io/navikt/baseimages/temurin:21-appdynamics
-ENV APPD_ENABLED=true
+FROM ghcr.io/navikt/baseimages/temurin:21
 
 COPY target/app.jar app.jar
-COPY export-vault-secrets.sh /init-scripts/export-vault-secrets.sh
 
-ENV JAVA_OPTS="-Xmx1024m \
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=75 \
                -Djava.security.egd=file:/dev/./urandom \
                -Dspring.profiles.active=nais"

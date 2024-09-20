@@ -16,6 +16,5 @@
   "BILAG_AZURE_SCOPE": "api://prod-fss.teamdokumenthandtering.bilag/.default",
   "BILAG_BASE_URL": "https://bilag.intern.nav.no",
   "BILAG_ENDPOINTS_BREVSERVER_URL": "https://brevserver-nais.intern.nav.no/brevweb",
-  "BILAG_ENDPOINTS_BREVSERVER_SCOPE": "api://prod-fss.teamdokumenthandtering.brevserver-nais/.default",
-  "APPDYNAMICS": "/apikey/appdynamics/prod"
+  "BILAG_ENDPOINTS_BREVSERVER_SCOPE": "api://prod-fss.teamdokumenthandtering.brevserver-nais/.default"
 }
