@@ -48,11 +48,6 @@ spec:
           namespace: traktor
           cluster: prod-fss
   webproxy: true
-  vault:
-    enabled: true
-    paths:
-      - kvPath: {{ APPDYNAMICS }}
-        mountPath: /var/run/secrets/nais.io/appdynamics
   replicas:
     min: {{ MIN_REPLICAS }}
     max: {{ MAX_REPLICAS }}
