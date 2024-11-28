@@ -41,10 +41,10 @@ public class OauthController {
 					.location(URI.create((String) session.getAttribute(ORIGINAL_URI)))
 					.build();
 		} catch (UserAuthorizationException e) {
-			log.error("Something went wrong when authenticating user with Microsoft: {}", e.getMessage());
+			log.error("Something went wrong when authenticating user with Microsoft: {}", e.getMessage(), e);
 			return ResponseEntity.status(BAD_REQUEST).build();
 		} catch (TokenAcquisitionException e) {
-			log.error("Something went wrong when acquiring access-token for authenticated user: {}", e.getMessage());
+			log.error("Something went wrong when acquiring access-token for authenticated user: {}", e.getMessage(), e);
 			return ResponseEntity.status(BAD_GATEWAY).build();
 		}
 	}

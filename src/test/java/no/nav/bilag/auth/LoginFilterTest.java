@@ -24,7 +24,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class LoginFilterTest {
 
-
 	private final String HENTDOKUMENT_PATH = "/hent/123";
 	private final String CALLBACK_PATH = "/oauth2/callback";
 	private final String READINESS_PATH = "/actuator/health/readiness";

@@ -18,8 +18,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class MDCInterceptor implements HandlerInterceptor {
 
 	private static final String USER_ID = "UserId";
-	public static final String MDC_CALL_ID = "callId";
-	public static final String MDC_USER_ID = "userId";
+	private static final String MDC_CALL_ID = "callId";
+	private static final String MDC_USER_ID = "userId";
 
 	private final OauthService oauthService;
 

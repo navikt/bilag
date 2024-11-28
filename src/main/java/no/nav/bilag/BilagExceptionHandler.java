@@ -65,7 +65,7 @@ public class BilagExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({Exception.class})
 	public ResponseEntity<Object> catchUnhandledExceptions(Exception e) {
-		log.warn("Uhåndtert execption: " + e);
+		log.warn("Uhåndtert execption: {}", e.getMessage(), e);
 
 		return ResponseEntity
 				.status(INTERNAL_SERVER_ERROR)

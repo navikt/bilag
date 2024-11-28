@@ -67,7 +67,7 @@ public class OboTokenService {
 	}
 
 	private void handleError(Throwable error) {
-		if (error instanceof WebClientResponseException response && ((WebClientResponseException) error).getStatusCode().is4xxClientError()) {
+		if (error instanceof WebClientResponseException response && response.getStatusCode().is4xxClientError()) {
 
 			// TODO: Når gruppetilgang blir strammet inn må en håndtere feilmelding her dersom gruppetilgang mangler
 			String feilmelding = format("Klarte ikke hente token fra Azure. Kall mot Microsoft feilet funksjonelt med status=%s, feilmelding=%s, response=%s",
