@@ -11,8 +11,8 @@ import static no.nav.bilag.mdc.MDCInterceptor.getUserId;
 
 public class NavHeadersFilter implements ExchangeFilterFunction {
 
-	public static final String NAV_CALLID = "Nav-Callid";
-	public static final String NAV_USER_ID = "Nav-User-Id";
+	private static final String NAV_CALLID = "Nav-Callid";
+	private static final String NAV_USER_ID = "Nav-User-Id";
 
 	@Override
 	public Mono<ClientResponse> filter(ClientRequest request, ExchangeFunction next) {

@@ -28,7 +28,7 @@ public class LoginFilter extends GenericFilterBean {
 	private static final String READINESS_URI = "/actuator/health/readiness";
 	private static final List<String> URIS_WITHOUT_REDIRECT = List.of(CALLBACK_URI, HEALTH_URI, READINESS_URI, LIVENESS_URI, METRICS_URI);
 
-	OauthService oauthService;
+	private final OauthService oauthService;
 
 	public LoginFilter(OauthService oauthService) {
 		this.oauthService = oauthService;
@@ -41,7 +41,7 @@ public class LoginFilter extends GenericFilterBean {
 		HttpServletResponse servletResponse = (HttpServletResponse) response;
 
 		if (URIS_WITHOUT_REDIRECT.contains(servletRequest.getRequestURI())) {
-			log.debug("Ingen redirect for uri=" + servletRequest.getRequestURI());
+			log.debug("Ingen redirect for uri={}", servletRequest.getRequestURI());
 		} else {
 			var accessToken = oauthService.getOAuth2AuthorizationFromSession(servletRequest.getSession());
 
