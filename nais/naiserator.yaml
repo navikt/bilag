@@ -30,6 +30,10 @@ spec:
   prometheus:
     enabled: true
     path: /actuator/prometheus
+  observability:
+    logging:
+      destinations:
+        - id: elastic
   azure:
     application:
       enabled: true
