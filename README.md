@@ -2,7 +2,8 @@
 Bilag tilbyr eit REST-endepunkt for å hente fram og vise fakturaar for OEBS.
 
 ## Testing
-For å teste at det fungerer å hente ut ein faktura i dev kan ein lime inn dette i nettlesaren
+For å teste at det fungerer å hente ut ein faktura i dev kan ein lime inn dette i nettlesaren. 
+Merk at ein fyrst må logge inn med ein Trygdeetaten-brukar.
 ```
 https://bilag-q1.dev.intern.nav.no/hent/1622562
 ```
