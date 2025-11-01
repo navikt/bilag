@@ -10,6 +10,12 @@ spec:
   ingresses:
     - {{ INGRESS }}
   env:
+    - name: JAVA_TRUSTSTORE_OPTIONS
+      value: "-Djavax.net.ssl.trustStore=$(NAV_TRUSTSTORE_PATH)
+              -Djavax.net.ssl.trustStorePassword=$(NAV_TRUSTSTORE_PASSWORD)"
+    - name: JDK_JAVA_OPTIONS
+      value: "-XX:MaxRAMPercentage=75
+              $(JAVA_PROXY_OPTIONS) $(JAVA_TRUSTSTORE_OPTIONS)"
     - name: BILAG_ENDPOINTS_BREVSERVER_URL
       value: {{ BILAG_ENDPOINTS_BREVSERVER_URL }}
     - name: BILAG_ENDPOINTS_BREVSERVER_SCOPE
