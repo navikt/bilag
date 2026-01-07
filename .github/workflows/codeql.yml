@@ -13,4 +13,4 @@ jobs:
     uses: navikt/dok-workflows/.github/workflows/codeql.yml@main
     secrets: inherit
     with:
-      java-version: '21'
+      java-version: '25'
