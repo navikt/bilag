@@ -9,10 +9,10 @@ import no.nav.bilag.exceptions.BrevserverFunctionalException;
 import no.nav.bilag.exceptions.BrevserverTechnicalException;
 import no.nav.bilag.exceptions.DokumentIkkeFunnetException;
 import no.nav.bilag.webclient.NavHeadersFilter;
-import org.springframework.boot.autoconfigure.codec.CodecProperties;
 import org.springframework.http.HttpHeaders;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -24,6 +24,7 @@ import static java.lang.String.format;
 public class BrevserverConsumer {
 
 	private static final String BREVSERVER_HENTDOKUMENT_URI = "/rest/hentdokument/{dokId}";
+	private static final DataSize MAX_IN_MEMORY_SIZE = DataSize.ofMegabytes(10);
 
 	private final WebClient webClient;
 	private final OauthService oauthService;
@@ -32,8 +33,7 @@ public class BrevserverConsumer {
 	public BrevserverConsumer(BilagProperties bilagProperties,
 							  OboTokenService oboTokenService,
 							  OauthService oauthService,
-							  WebClient webClient,
-							  CodecProperties codecProperties) {
+							  WebClient webClient) {
 		this.oboTokenService = oboTokenService;
 		this.oauthService = oauthService;
 		this.webClient = webClient.mutate()
@@ -41,12 +41,12 @@ public class BrevserverConsumer {
 				.filter(new NavHeadersFilter())
 				.exchangeStrategies(ExchangeStrategies.builder()
 						.codecs(clientCodecConfigurer -> clientCodecConfigurer
-								.defaultCodecs().maxInMemorySize((int) codecProperties.getMaxInMemorySize().toBytes()))
+								.defaultCodecs().maxInMemorySize((int) MAX_IN_MEMORY_SIZE.toBytes()))
 						.build())
 				.build();
 	}
 
-	@Retryable(retryFor = BrevserverFunctionalException.class)
+	@Retryable(includes = BrevserverFunctionalException.class)
 	public byte[] hentDokument(String dokId, HttpSession session) {
 		String bearerToken = hentBearerTokenFraSession(session);
 

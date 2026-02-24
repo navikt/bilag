@@ -1,7 +1,7 @@
 package no.nav.bilag.auth;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.bilag.BilagProperties;
 import no.nav.bilag.exceptions.OboTokenException;
@@ -25,16 +25,16 @@ public class OboTokenService {
 
 	private final AzureProperties azureProperties;
 	private final BilagProperties bilagProperties;
-	private final ObjectMapper objectMapper;
+	private final JsonMapper jsonMapper;
 	private final WebClient webClient;
 
 	public OboTokenService(AzureProperties azureProperties,
 						   BilagProperties bilagProperties,
-						   ObjectMapper objectMapper,
+						   JsonMapper jsonMapper,
 						   WebClient webClient) {
 		this.azureProperties = azureProperties;
 		this.bilagProperties = bilagProperties;
-		this.objectMapper = objectMapper;
+		this.jsonMapper = jsonMapper;
 		this.webClient = webClient.mutate()
 				.baseUrl(azureProperties.openidConfigTokenEndpoint())
 				.defaultHeader(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
@@ -60,8 +60,8 @@ public class OboTokenService {
 				.block();
 
 		try {
-			return objectMapper.readValue(responseJson, TokenResponse.class).accessToken();
-		} catch (JsonProcessingException e) {
+			return jsonMapper.readValue(responseJson, TokenResponse.class).accessToken();
+		} catch (JacksonException e) {
 			throw new OboTokenException("Klarte ikke parse token fra Azure. Feilmelding=" + e.getMessage(), e);
 		}
 	}
